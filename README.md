@@ -30,16 +30,16 @@ from pushcollector import Collector
 
 # Get an instance of a collector; the concrete backend returned
 # may differ per execution environment
-collector = Collector.default()
+collector = Collector.get()
 
 # Save a log file
-collector.save_log('pushlog.json', json.dumps(somedata))
+collector.attach_file('pushlog.json', json.dumps(somedata)).result()
 
 # Append to a log file
-collector.append_log('pushlog.txt', sometext)
+collector.append_file('pushlog.txt', sometext).result()
 
 # Save some push item(s)
-collector.update_push_items(items)
+collector.update_push_items(items).result()
 ```
 
 Development
