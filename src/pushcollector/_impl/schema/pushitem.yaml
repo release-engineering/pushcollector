@@ -1,0 +1,128 @@
+title: pushitem
+
+description: >-
+  Schema for a push item dict, as accepted by methods in the pushcollector
+  library.
+
+$schema: http://json-schema.org/draft-07/schema#
+
+type: object
+
+properties:
+  # A filename for this push item.
+  #
+  # Only a filename (basename) should be provided, with no leading path.
+  #
+  # A non-empty filename must always be provided, even for push items which do
+  # not represent a file. In such cases, an identifier for the push item which
+  # is meaningful to end-users should be provided.
+  #
+  # For example, container image manifests may provide their digest as the filename,
+  # despite that manifests are not guaranteed to be stored as files.
+  filename:
+    type: string
+    pattern: "^[^/]+$"
+
+  # The state of this push item.
+  state:
+    type: string
+    enum:
+    # Successful states:
+    - PUSHED        # successfully pushed
+    - PENDING       # not yet processed
+    - EXISTS        # push item already existed at destination
+    - DELETED       # successfully deleted
+    - MISSING       # delete was requested but item is already absent
+    - SKIPPED       # processing of file was skipped
+
+    # Unsuccessful states:
+    - UNKNOWN       # an unknown error occurred when handling this item
+    - ONSERVER      # item already exists at destination but with incorrect content
+    - NOTFOUND      # content for this push item is missing (e.g. file not on local disk)
+    - UPLOADFAILED  # uploading this content to remote server failed
+    - INVALIDFILE   # something is wrong with the content of this file
+    - UNSIGNED      # push item is unsigned, where policy requires signature
+    - CHECKSUM      # push item actual checksum did not match expected
+    - SUBSCRIPTION  # push item could not be added to repositories on remote server
+    - NOTPUSHED     # did not attempt to push due to earlier errors
+
+    # Legacy states, please don't use these in new code
+    - PUBLISHED
+    - EXPORTED
+    - DOCKERTAGMISMATCH
+
+  # The source of this push item.
+  #
+  # If the push item is a file, this should be the full path to the file, as
+  # accessed by the tool processing the push items.  If the push item does not
+  # represent a file, this should generally be omitted.
+  src:
+    anyOf:
+    - type: "null"
+    - type: string
+
+  # Destination of this push item.
+  #
+  # This library doesn't define any semantics for the meaning of "dest";
+  # any strings may be provided here.
+  #
+  # Examples for possible uses of "dest" include:
+  # - a path to a directory (for items pushed using rsync)
+  # - a Pulp repository name (for items pushed using Pulp)
+  dest:
+    anyOf:
+    - type: "null"
+    - type: string
+
+  # Checksums for this push item, e.g. if this item represents a file, then the
+  # md5sum and sha256sum of that file's bytes
+  checksums:
+    anyOf:
+    - type: "null"
+    - type: object
+      properties:
+        md5:
+          type: string
+          pattern: "^[0-9a-f]{32}$"
+        sha256:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+      additionalProperties: false
+
+  # A string representing the origin of this push item.
+  #
+  # This library doesn't enforce any particular semantics for the "origin"
+  # field, but it is generally expected to record some info on how this push
+  # item was discovered. For example:
+  #
+  # - if this item was pushed due to belonging to advisory ABC-123, the origin
+  #   field may be set to "ABC-123"
+  # - if this item was pushed due to recursing under /some/path, the origin field
+  #   may be set to "/some/path"
+  # - if this item was pushed due to an explicit request from an end-user, the
+  #   origin may be set to "metadata"
+  #
+  origin:
+    anyOf:
+    - type: "null"
+    - type: string
+
+  # NVR for the koji build from which this push item was extracted, if any
+  build:
+    anyOf:
+    - type: "null"
+    - type: string
+
+  # If this push item was GPG signed, this should be an identifier for the
+  # signing key used.
+  #
+  # Generically a short key ID such as "F21541EB" is used, though the library
+  # doesn't enforce this.
+  signing_key:
+    anyOf:
+    - type: "null"
+    - type: string
+
+required:
+- filename
+- state

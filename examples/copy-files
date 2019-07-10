@@ -1,0 +1,75 @@
+#!/usr/bin/env python
+import os
+import logging
+import shutil
+from argparse import ArgumentParser
+
+from pushcollector import Collector
+
+log = logging.getLogger("copy-files")
+
+
+def copy_files(src, dest):
+    collector = Collector.get()
+
+    items = []
+
+    # Find what we'll process.
+    for (dirpath, _, filenames) in os.walk(src):
+        for filename in filenames:
+            filepath = os.path.join(dirpath, filename)
+            items.append(
+                {
+                    "src": os.path.abspath(filepath),
+                    "dest": os.path.abspath(os.path.join(dest, filepath)),
+                    "filename": filename,
+                    "state": "PENDING",
+                }
+            )
+
+    # Record what we'll process with the collector, and block until that's done.
+    collector.update_push_items(items).result()
+
+    # Now copy them
+    for item in items:
+        src = item["src"]
+        dest = item["dest"]
+
+        try:
+            if not os.path.exists(os.path.dirname(dest)):
+                os.makedirs(os.path.dirname(dest))
+            shutil.copy2(src, dest)
+            item["state"] = "PUSHED"
+        except Exception as exc:
+            log.exception("Copying %s failed", src)
+            # Collect all the exceptions into errors.log
+            collector.append_file("errors.log", str(exc) + "\n").result()
+            item["state"] = "UPLOADFAILED"
+
+    # Record the items we've pushed
+    collector.update_push_items(items).result()
+
+    log.info("Processed %s file(s)", len(items))
+
+
+def main():
+    log.setLevel(logging.INFO)
+    logging.basicConfig(format="%(message)s")
+
+    parser = ArgumentParser(
+        description="Recursive copy of files from one directory to another"
+    )
+    parser.add_argument("--debug", action="store_true")
+    parser.add_argument("src", help="Source directory")
+    parser.add_argument("dest", help="Destination directory")
+
+    p = parser.parse_args()
+
+    if p.debug:
+        log.setLevel(logging.DEBUG)
+
+    return copy_files(p.src, p.dest)
+
+
+if __name__ == "__main__":
+    main()
