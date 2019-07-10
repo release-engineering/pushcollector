@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Push Item Schema &#8212; pushcollector  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Backends" href="backends.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="push-item-schema">
+<span id="schema"></span><h1>Push Item Schema<a class="headerlink" href="#push-item-schema" title="Permalink to this headline">¶</a></h1>
+<p>This document shows the schema for push item data understood by this library,
+in <a class="reference external" href="https://json-schema.org/">JSON schema</a> format.</p>
+<div class="code yaml highlight-default notranslate"><div class="highlight"><pre><span></span>title: pushitem
+
+description: &gt;-
+  Schema for a push item dict, as accepted by methods in the pushcollector
+  library.
+
+$schema: http://json-schema.org/draft-07/schema#
+
+type: object
+
+properties:
+  # A filename for this push item.
+  #
+  # Only a filename (basename) should be provided, with no leading path.
+  #
+  # A non-empty filename must always be provided, even for push items which do
+  # not represent a file. In such cases, an identifier for the push item which
+  # is meaningful to end-users should be provided.
+  #
+  # For example, container image manifests may provide their digest as the filename,
+  # despite that manifests are not guaranteed to be stored as files.
+  filename:
+    type: string
+    pattern: &quot;^[^/]+$&quot;
+
+  # The state of this push item.
+  state:
+    type: string
+    enum:
+    # Successful states:
+    - PUSHED        # successfully pushed
+    - PENDING       # not yet processed
+    - EXISTS        # push item already existed at destination
+    - DELETED       # successfully deleted
+    - MISSING       # delete was requested but item is already absent
+    - SKIPPED       # processing of file was skipped
+
+    # Unsuccessful states:
+    - UNKNOWN       # an unknown error occurred when handling this item
+    - ONSERVER      # item already exists at destination but with incorrect content
+    - NOTFOUND      # content for this push item is missing (e.g. file not on local disk)
+    - UPLOADFAILED  # uploading this content to remote server failed
+    - INVALIDFILE   # something is wrong with the content of this file
+    - UNSIGNED      # push item is unsigned, where policy requires signature
+    - CHECKSUM      # push item actual checksum did not match expected
+    - SUBSCRIPTION  # push item could not be added to repositories on remote server
+    - NOTPUSHED     # did not attempt to push due to earlier errors
+
+    # Legacy states, please don&#39;t use these in new code
+    - PUBLISHED
+    - EXPORTED
+    - DOCKERTAGMISMATCH
+
+  # The source of this push item.
+  #
+  # If the push item is a file, this should be the full path to the file, as
+  # accessed by the tool processing the push items.  If the push item does not
+  # represent a file, this should generally be omitted.
+  src:
+    anyOf:
+    - type: &quot;null&quot;
+    - type: string
+
+  # Destination of this push item.
+  #
+  # This library doesn&#39;t define any semantics for the meaning of &quot;dest&quot;;
+  # any strings may be provided here.
+  #
+  # Examples for possible uses of &quot;dest&quot; include:
+  # - a path to a directory (for items pushed using rsync)
+  # - a Pulp repository name (for items pushed using Pulp)
+  dest:
+    anyOf:
+    - type: &quot;null&quot;
+    - type: string
+
+  # Checksums for this push item, e.g. if this item represents a file, then the
+  # md5sum and sha256sum of that file&#39;s bytes
+  checksums:
+    anyOf:
+    - type: &quot;null&quot;
+    - type: object
+      properties:
+        md5:
+          type: string
+          pattern: &quot;^[0-9a-f]{32}$&quot;
+        sha256:
+          type: string
+          pattern: &quot;^[0-9a-f]{64}$&quot;
+      additionalProperties: false
+
+  # A string representing the origin of this push item.
+  #
+  # This library doesn&#39;t enforce any particular semantics for the &quot;origin&quot;
+  # field, but it is generally expected to record some info on how this push
+  # item was discovered. For example:
+  #
+  # - if this item was pushed due to belonging to advisory ABC-123, the origin
+  #   field may be set to &quot;ABC-123&quot;
+  # - if this item was pushed due to recursing under /some/path, the origin field
+  #   may be set to &quot;/some/path&quot;
+  # - if this item was pushed due to an explicit request from an end-user, the
+  #   origin may be set to &quot;metadata&quot;
+  #
+  origin:
+    anyOf:
+    - type: &quot;null&quot;
+    - type: string
+
+  # NVR for the koji build from which this push item was extracted, if any
+  build:
+    anyOf:
+    - type: &quot;null&quot;
+    - type: string
+
+  # If this push item was GPG signed, this should be an identifier for the
+  # signing key used.
+  #
+  # Generically a short key ID such as &quot;F21541EB&quot; is used, though the library
+  # doesn&#39;t enforce this.
+  signing_key:
+    anyOf:
+    - type: &quot;null&quot;
+    - type: string
+
+required:
+- filename
+- state
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pushcollector</a></h1>
+
+
+
+<p class="blurb">A library for collecting information from push tasks</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backends</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Push Item Schema</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushcollector">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushcollector">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="backends.html" title="previous chapter">Backends</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/schema.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushcollector" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

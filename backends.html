@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Backends &#8212; pushcollector  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Push Item Schema" href="schema.html" />
+    <link rel="prev" title="API Reference" href="api-reference.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="backends">
+<span id="id1"></span><h1>Backends<a class="headerlink" href="#backends" title="Permalink to this headline">¶</a></h1>
+<p>The pushcollector library ships with multiple backends implementing the
+<a class="reference internal" href="api-reference.html#pushcollector.Collector" title="pushcollector.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a> interface, and also allows integrators
+to implement and register their own backends.</p>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#local" id="id2">local</a></p></li>
+<li><p><a class="reference internal" href="#dummy" id="id3">dummy</a></p></li>
+<li><p><a class="reference internal" href="#implementing-a-backend" id="id4">Implementing a backend</a></p>
+<ul>
+<li><p><a class="reference internal" href="#implement-collector-interface" id="id5">Implement collector interface</a></p></li>
+<li><p><a class="reference internal" href="#register-the-backend" id="id6">Register the backend</a></p></li>
+<li><p><a class="reference internal" href="#set-as-default-optional" id="id7">Set as default (optional)</a></p></li>
+<li><p><a class="reference internal" href="#unregister-backend-optional" id="id8">Unregister backend (optional)</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="local">
+<h2><a class="toc-backref" href="#id2">local</a><a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h2>
+<p>The “local” backend is the default backend for the pushcollector library.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Collector</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This backend collects all recorded information into an <code class="docutils literal notranslate"><span class="pre">artifacts</span></code> directory
+under the current working directory (at the time the collector was initialized).</p>
+<p>Timestamped subdirectories are used so that commands using this backend will
+write to a new subdirectory on each run, while a ‘latest’ symlink is written to
+make it easy to identify the most recent artifacts directory.</p>
+<p>Here is an example of the directory structure created by this backend:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tree artifacts
+artifacts
+└── 20190710143228
+│   ├── attached-file1.txt
+│   ├── attached-file2.bin
+│   └── pushitems.jsonl
+└── latest -&gt; 20190710143228
+
+2 directory, 3 files
+</pre></div>
+</div>
+<p>The timestamped artifacts subdirectory will contain:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pushitems.jsonl</span></code>, a file in <a class="reference external" href="http://jsonlines.org/">JSON Lines</a> format.
+Each line in the file is a single push item, using the defined <a class="reference internal" href="schema.html#schema"><span class="std std-ref">Push Item Schema</span></a>.</p></li>
+<li><p>Any other files attached via <a class="reference internal" href="api-reference.html#pushcollector.Collector.attach_file" title="pushcollector.Collector.attach_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">attach_file()</span></code></a>
+or  <a class="reference internal" href="api-reference.html#pushcollector.Collector.append_file" title="pushcollector.Collector.append_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">append_file()</span></code></a>.</p></li>
+</ul>
+</div>
+<div class="section" id="dummy">
+<h2><a class="toc-backref" href="#id3">dummy</a><a class="headerlink" href="#dummy" title="Permalink to this headline">¶</a></h2>
+<p>The “dummy” backend ignores all provided data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Collector</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dummy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This backend may be useful in automated tests and other environments
+where there is no need to collect information during a task.</p>
+<p>Note that, even when the dummy backend is in use, all push item data
+provided to the backend must satisfy the <a class="reference internal" href="schema.html#schema"><span class="std std-ref">Push Item Schema</span></a>.</p>
+</div>
+<div class="section" id="implementing-a-backend">
+<h2><a class="toc-backref" href="#id4">Implementing a backend</a><a class="headerlink" href="#implementing-a-backend" title="Permalink to this headline">¶</a></h2>
+<p>The built-in backends are intended for local development and testing.
+For production use, you’ll likely need to implement your own backend
+suitable for your task execution environment.  These are the
+necessary steps to add a new backend:</p>
+<div class="section" id="implement-collector-interface">
+<h3><a class="toc-backref" href="#id5">Implement collector interface</a><a class="headerlink" href="#implement-collector-interface" title="Permalink to this headline">¶</a></h3>
+<p>Write a class which implements the instance methods on
+the <a class="reference internal" href="api-reference.html#pushcollector.Collector" title="pushcollector.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a> interface. This class should
+do whatever’s needed to record push items and log files in your
+environment (e.g. inserting records to a database; copying log files
+to a remote host).</p>
+<p>Here is an example of a contrived collector backend which saves push items
+to a database, and sends attached “files” to <a class="reference external" href="https://docs.python.org/3/library/syslog.html#module-syslog" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">syslog</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyCollector</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db</span>
+
+  <span class="k">def</span> <span class="nf">update_push_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">upsert</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">attach_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">syslog</span><span class="o">.</span><span class="n">openlog</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+      <span class="n">syslog</span><span class="o">.</span><span class="n">syslog</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+      <span class="n">syslog</span><span class="o">.</span><span class="n">closelog</span><span class="p">()</span>
+
+  <span class="k">def</span> <span class="nf">append_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attach_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When implementing a collector backend, take note of the following:</p>
+<ul class="simple">
+<li><p>All push items are automatically validated against the <a class="reference internal" href="schema.html#schema"><span class="std std-ref">Push Item Schema</span></a>,
+so it’s unnecessary to repeat this validation in your backend.</p></li>
+<li><p>Your <code class="docutils literal notranslate"><span class="pre">update_push_items</span></code> implementation should be prepared to accept
+anywhere from zero to tens of thousands of items at once, so the backend
+may have to consider scaling and performance issues.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">attach_file</span></code> and <code class="docutils literal notranslate"><span class="pre">append_file</span></code> methods are always invoked with
+content encoded as <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>; backends shouldn’t attempt to handle
+encoding themselves.</p></li>
+<li><p>Although the <a class="reference internal" href="api-reference.html#pushcollector.Collector" title="pushcollector.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a> interface is defined as
+returning <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Future" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Future</span></code></a> instances, your backend is allowed
+to be implemented in a blocking or non-blocking style. If implemented as
+fully blocking, it need not return futures (as in the above example).</p></li>
+</ul>
+</div>
+<div class="section" id="register-the-backend">
+<h3><a class="toc-backref" href="#id6">Register the backend</a><a class="headerlink" href="#register-the-backend" title="Permalink to this headline">¶</a></h3>
+<p>Call the <a class="reference internal" href="api-reference.html#pushcollector.Collector.register_backend" title="pushcollector.Collector.register_backend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_backend()</span></code></a> method to register
+the backend with the library, using a short meaningful name.</p>
+<p>This method accepts any callable which can be invoked to create an instance
+of your backend.  If your backend can be constructed with no arguments, this
+could be simply the name of the class you’ve implemented:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Collector</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s1">&#39;my-collector&#39;</span><span class="p">,</span> <span class="n">MyCollector</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, if you need to pass some context into your backend, you could
+bind that context when the backend is registered.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Collector</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s1">&#39;my-collector&#39;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">MyCollector</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">some_database</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-as-default-optional">
+<h3><a class="toc-backref" href="#id7">Set as default (optional)</a><a class="headerlink" href="#set-as-default-optional" title="Permalink to this headline">¶</a></h3>
+<p>After you’ve registered your own backend, you can optionally set it as the default
+backend for the library. This is useful in order to provide your backend to third-party
+code implemented against the default backend.</p>
+<p>Use the  <a class="reference internal" href="api-reference.html#pushcollector.Collector.set_default_backend" title="pushcollector.Collector.set_default_backend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_default_backend()</span></code></a> method to achieve this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Collector</span><span class="o">.</span><span class="n">set_default_backend</span><span class="p">(</span><span class="s1">&#39;my-collector&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="unregister-backend-optional">
+<h3><a class="toc-backref" href="#id8">Unregister backend (optional)</a><a class="headerlink" href="#unregister-backend-optional" title="Permalink to this headline">¶</a></h3>
+<p>If it’s not appropriate for your backend to remain available for the lifetime
+of the current process, you can unregister it once it’s no longer required.
+Simply call the <a class="reference internal" href="api-reference.html#pushcollector.Collector.register_backend" title="pushcollector.Collector.register_backend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_backend()</span></code></a> method again,
+passing <code class="docutils literal notranslate"><span class="pre">None</span></code> as the value for your backend.</p>
+<p>Unregistering a backend also unsets the backend as the library’s default.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Collector</span><span class="o">.</span><span class="n">register_backend</span><span class="p">(</span><span class="s1">&#39;my-collector&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+<span class="c1"># my-collector backend is now unavailable</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pushcollector</a></h1>
+
+
+
+<p class="blurb">A library for collecting information from push tasks</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api-reference.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Backends</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#local">local</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dummy">dummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementing-a-backend">Implementing a backend</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="schema.html">Push Item Schema</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://github.com/release-engineering/pushcollector">Source</a></li>
+    
+    <li class="toctree-l1"><a href="https://pypi.org/project/pushcollector">PyPI</a></li>
+    
+    <li class="toctree-l1"><a href="genindex.html">Index</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="api-reference.html" title="previous chapter">API Reference</a></li>
+      <li>Next: <a href="schema.html" title="next chapter">Push Item Schema</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Red Hat.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/backends.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/release-engineering/pushcollector" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
