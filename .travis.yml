@@ -20,7 +20,7 @@ deploy:
   provider: pypi
   user: content-delivery-release-bot
   password:
-    secure: not-yet-initialized
+    secure: 80GkCS797ts+sSs1ys2Cu/7aj0XSd7sSx9+a8+jLRQR7THLNdEE/OnzLEgBfC0fRvKYrsEqGIMsjvWVwQT2XA4Wl8It6O/SGsq4iJCJmGLNDzzZ3xrzC+ZPvceBH02tIwQggGVnxTjvgHYixf20EUENSlilwpEEA1x9DoLfxWno5D8tJbCmwOZwHxdqKkLpnvNELrwwplFN9NCAgtQq+LuvqXwOLp87Dp7DILSKFRE53wqul8MYtmJFGKjF0qHPzEq5/W/xbLy2sr8FFSi6fy22mjup4z5K27eQ6iyGp7PORHS28SMUDM3i3JOBi9OtAx+SQc87LzdyPFBC4S8GC8pT6QPua7DcaZqPnaL2To8xX9eDwO8EdlsH0f2aRj8ZUnBN0Ki7HugT+9302QF/K36Tkz1VQ/Z67bl2ZhVZxnTuWGkKjpTQnCUVYioHAPTbNblPVhSXBF2qlaCQV6YQE+r2Vzt9JgNHrYgjQ5SWP1gh/axdSboKKQBXkyk4ER01xqP+mS6o4mplINjKiUY5lpy9v9cXDmufSkjT2/72nNl8PSoMb72+q+J+G+JPa+WfmdMeuuKon015fMnTm/z5b5msYCmCLaLly2Jzd0x3411cpZykmt3v8bTbcDuTpOg66pQT+oKd5UIlo9mICo4JXKqn316zIKOv8PQdB/PKiT4w=
   on:
     tags: true
     # Only one of the environments in the matrix should have
