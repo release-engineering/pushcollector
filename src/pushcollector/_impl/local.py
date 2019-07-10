@@ -11,9 +11,7 @@ class LocalCollector(object):
     # the 'artifacts' subdir of the current working directory.
     # There is no way to customize the used directory.
     def __init__(self):
-        self._artifacts_dir = os.path.join(
-            os.getcwd(), "artifacts", datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        )
+        self._artifacts_dir = os.path.join(os.getcwd(), "artifacts", self.timestamp())
 
     def update_push_items(self, items):
         with self._open_file("pushitems.jsonl", "a") as file:
@@ -45,3 +43,7 @@ class LocalCollector(object):
             LOG.info("Logging to %s", path)
 
         return open(path, *args, **kwargs)
+
+    @classmethod
+    def timestamp(cls):
+        return datetime.datetime.now().strftime("%Y%m%d%H%M%S")
