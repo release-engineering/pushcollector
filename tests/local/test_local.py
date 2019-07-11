@@ -2,6 +2,7 @@ import logging
 import textwrap
 
 from pushcollector import Collector
+from pushcollector._impl.local import LocalCollector
 
 
 def test_local_saves_to_artifacts(caplog, tmpdir, monkeypatch):
@@ -63,3 +64,38 @@ def test_local_saves_to_artifacts(caplog, tmpdir, monkeypatch):
         "Logging to %s" % artifactsdir.join("some-file.bin"),
         "Logging to %s" % artifactsdir.join("appended-file.txt"),
     ]
+
+
+def test_local_dir_sequence(tmpdir, monkeypatch):
+    """local collector creates timestamped directories per run, with
+    'latest' symlink pointing to latest"""
+    monkeypatch.chdir(tmpdir)
+
+    # Use first collector
+    monkeypatch.setattr(LocalCollector, "timestamp", lambda cls: "time1")
+    Collector.get("local").update_push_items(
+        [{"filename": "file1", "state": "PUSHED"}]
+    ).result()
+
+    # Use another collector a few seconds later
+    monkeypatch.setattr(LocalCollector, "timestamp", lambda cls: "time2")
+    Collector.get("local").update_push_items(
+        [{"filename": "file1", "state": "PUSHED"}]
+    ).result()
+
+    # And another even later
+    monkeypatch.setattr(LocalCollector, "timestamp", lambda cls: "time3")
+    Collector.get("local").update_push_items(
+        [{"filename": "file1", "state": "PUSHED"}]
+    ).result()
+
+    # It should have created these paths:
+    artifactsdir = tmpdir.join("artifacts")
+    assert artifactsdir.check(dir=True)
+    assert artifactsdir.join("time1").check(dir=True)
+    assert artifactsdir.join("time2").check(dir=True)
+    assert artifactsdir.join("time3").check(dir=True)
+    assert artifactsdir.join("latest").check(dir=True, link=True)
+
+    # and latest should be a symlink to the last created timestamp dir
+    assert artifactsdir.join("latest").readlink() == "time3"

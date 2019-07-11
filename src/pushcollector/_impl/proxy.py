@@ -1,17 +1,18 @@
 import os
 
 import six
-from more_executors.futures import f_return
+from more_executors.futures import f_return, f_map
 import yaml
 import jsonschema
 
 
-def coerce_future(value):
+def empty_future(value):
     if "add_done_callback" in dir(value):
-        # It's a future
-        return value
-    # It's not => make it a future
-    return f_return(value)
+        # It's a future, map it to None
+        return f_map(value, lambda _: None)
+    # It's not a future => operation has already completed,
+    # return empty future to denote success
+    return f_return()
 
 
 def maybe_encode(value):
@@ -53,12 +54,12 @@ class CollectorProxy(object):
         for item in items:
             jsonschema.validate(item, schema=self._ITEM_SCHEMA)
 
-        return coerce_future(self._delegate.update_push_items(items))
+        return empty_future(self._delegate.update_push_items(items))
 
     def attach_file(self, filename, content):
         content = maybe_encode(content)
-        return coerce_future(self._delegate.attach_file(filename, content))
+        return empty_future(self._delegate.attach_file(filename, content))
 
     def append_file(self, filename, content):
         content = maybe_encode(content)
-        return coerce_future(self._delegate.append_file(filename, content))
+        return empty_future(self._delegate.append_file(filename, content))
