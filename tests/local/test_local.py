@@ -18,7 +18,7 @@ def test_local_saves_to_artifacts(caplog, tmpdir, monkeypatch):
     collector.update_push_items(
         [
             {"filename": "file1", "state": "PUSHED"},
-            {"filename": "file2", "state": "INVALIDFILE"},
+            {"filename": "somedir/file2", "state": "INVALIDFILE"},
         ]
     ).result()
     collector.update_push_items([{"filename": "file3", "state": "MISSING"}]).result()
@@ -42,7 +42,7 @@ def test_local_saves_to_artifacts(caplog, tmpdir, monkeypatch):
         == textwrap.dedent(
             """
             {"filename": "file1", "state": "PUSHED"}
-            {"filename": "file2", "state": "INVALIDFILE"}
+            {"filename": "somedir/file2", "state": "INVALIDFILE"}
             {"filename": "file3", "state": "MISSING"}
             """
         ).lstrip()
