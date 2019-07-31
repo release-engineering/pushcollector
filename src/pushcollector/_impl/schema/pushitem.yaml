@@ -11,7 +11,8 @@ type: object
 properties:
   # A filename for this push item.
   #
-  # Only a filename (basename) should be provided, with no leading path.
+  # The filename should always include the basename component of a file's path.
+  # It may optionally include leading path components.
   #
   # A non-empty filename must always be provided, even for push items which do
   # not represent a file. In such cases, an identifier for the push item which
@@ -21,7 +22,6 @@ properties:
   # despite that manifests are not guaranteed to be stored as files.
   filename:
     type: string
-    pattern: "^[^/]+$"
 
   # The state of this push item.
   state:
