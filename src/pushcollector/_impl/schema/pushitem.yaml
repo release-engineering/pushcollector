@@ -116,7 +116,7 @@ properties:
   # If this push item was GPG signed, this should be an identifier for the
   # signing key used.
   #
-  # Generically a short key ID such as "F21541EB" is used, though the library
+  # Generally a short key ID such as "F21541EB" is used, though the library
   # doesn't enforce this.
   signing_key:
     anyOf:
