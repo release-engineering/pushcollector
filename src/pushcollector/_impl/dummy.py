@@ -1,7 +1,7 @@
 class DummyCollector(object):
     # Registered as backend 'dummy', this implementation does nothing at all
     # with the passed data.
-    def update_push_items(self, items):
+    def update_push_items(self, items, **kwargs):
         pass
 
     def attach_file(self, filename, content):

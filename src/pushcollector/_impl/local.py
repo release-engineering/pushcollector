@@ -13,7 +13,7 @@ class LocalCollector(object):
     def __init__(self):
         self._artifacts_dir = os.path.join(os.getcwd(), "artifacts", self.timestamp())
 
-    def update_push_items(self, items):
+    def update_push_items(self, items, **kwargs):
         with self._open_file("pushitems.jsonl", "a") as file:
             for item in items:
                 json.dump(item, file, sort_keys=True)

@@ -16,7 +16,7 @@ class Collector(object):
     _INITIAL_BACKEND = "local"
     _DEFAULT_BACKEND = _INITIAL_BACKEND
 
-    def update_push_items(self, items):
+    def update_push_items(self, items, **kwargs):
         """Record a state change on one or more push items.
 
         Arguments:
@@ -29,6 +29,9 @@ class Collector(object):
 
                     An exception will be raised if any push item does not match
                     the documented schema.
+            object nochannel
+                    if nochannel is provided, it may be used by proxy collector
+                    to allow duplicate push items.
 
         Returns:
             :class:`~concurrent.futures.Future`

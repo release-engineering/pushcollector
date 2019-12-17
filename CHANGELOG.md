@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+### Added
+
+- Make `Collector.update_push_items` accept keyword arguments.
 
 ## [1.1.0] - 2019-08-01
 

@@ -50,11 +50,11 @@ class CollectorProxy(object):
     def __init__(self, delegate):
         self._delegate = delegate
 
-    def update_push_items(self, items):
+    def update_push_items(self, items, **kwargs):
         for item in items:
             jsonschema.validate(item, schema=self._ITEM_SCHEMA)
 
-        return empty_future(self._delegate.update_push_items(items))
+        return empty_future(self._delegate.update_push_items(items, **kwargs))
 
     def attach_file(self, filename, content):
         content = maybe_encode(content)
