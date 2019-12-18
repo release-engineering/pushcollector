@@ -14,6 +14,7 @@ class LocalCollector(object):
         self._artifacts_dir = os.path.join(os.getcwd(), "artifacts", self.timestamp())
 
     def update_push_items(self, items, **kwargs):
+        # pylint:disable=unused-argument
         with self._open_file("pushitems.jsonl", "a") as file:
             for item in items:
                 json.dump(item, file, sort_keys=True)
