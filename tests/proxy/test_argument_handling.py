@@ -22,7 +22,7 @@ def test_pushitem_obj_push():
 
     collector = Collector.get("dummy")
 
-    pushitem = PushItem("test_pushitem")
+    pushitem = PushItem(name="test_pushitem")
     ret_val = collector.update_push_items([pushitem])
 
     assert ret_val.result() is None
@@ -46,7 +46,7 @@ def test_pushitem_obj_attributes():
     collector = Collector.get("mock")
 
     pushitem = PushItem(
-        "test_push",
+        name="test_push",
         origin="some_origin",
         src="source",
         dest=["dest1", "dest2"],
