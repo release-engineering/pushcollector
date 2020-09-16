@@ -29,20 +29,22 @@ def test_pushitem_obj_push():
 
 
 def test_bad_obj_push():
-    """Any object apart from PushItem type raises a validation error."""
+    """Any invalid object type push item raises an error."""
 
     collector = Collector.get("dummy")
 
     pushitem = object()
-    with pytest.raises(jsonschema.ValidationError):
+    with pytest.raises(AttributeError):
         collector.update_push_items([pushitem])
 
 
 def test_pushitem_obj_attributes():
     """PushItem object attributes are translated and available as expected in
-    pushitem dict passed to update_push_items"""
+    pushitem dict passed to update_push_items. A pushitem is generated for each
+    destination"""
 
-    Collector.register_backend("mock", Mock)
+    mock = Mock()
+    Collector.register_backend("mock", lambda: mock)
     collector = Collector.get("mock")
 
     pushitem = PushItem(
@@ -57,16 +59,18 @@ def test_pushitem_obj_attributes():
     )
     collector.update_push_items([pushitem])
 
-    update_push_item_args = collector._delegate.update_push_items.call_args[0][0]
-    push_args = update_push_item_args[0]
-    assert push_args["filename"] == pushitem.name
-    assert push_args["state"] == pushitem.state
-    assert push_args["src"] == pushitem.src
-    assert push_args["dest"] == str(pushitem.dest)
-    assert push_args["checksums"] == {
-        "md5": pushitem.md5sum,
-        "sha256": pushitem.sha256sum,
-    }
-    assert push_args["origin"] == pushitem.origin
-    assert push_args["build"] == pushitem.build
-    assert push_args["signing_key"] == pushitem.signing_key
+    update_push_item_args = mock.update_push_items.call_args[0][0]
+    assert len(update_push_item_args) == 2
+    for i in range(len(update_push_item_args)-1):
+        push_args = update_push_item_args[i]
+        assert push_args["filename"] == pushitem.name
+        assert push_args["state"] == pushitem.state
+        assert push_args["src"] == pushitem.src
+        assert push_args["dest"] == pushitem.dest[i]
+        assert push_args["checksums"] == {
+                "md5": pushitem.md5sum,
+                "sha256": pushitem.sha256sum,
+        }
+        assert push_args["origin"] == pushitem.origin
+        assert push_args["build"] == pushitem.build
+        assert push_args["signing_key"] == pushitem.signing_key

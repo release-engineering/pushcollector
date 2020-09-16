@@ -52,45 +52,41 @@ class CollectorProxy(object):
         self._delegate = delegate
 
     def _translate_pushitem(self, pushitem):
-        def _get_checksum():
-            if pushitem.md5sum and pushitem.sha256sum:
-                return {"md5": pushitem.md5sum, "sha256": pushitem.sha256sum}
-            else:
-                return None
+        if isinstance(pushitem, dict):
+            return [pushitem]
 
-        pushitem = {
+        pushitems = []
+        checksums = {}
+        if pushitem.md5sum:
+            checksums["md5"] = pushitem.md5sum
+        if pushitem.sha256sum:
+            checksums["sha256"] = pushitem.sha256sum
+
+        push_item = {
             "filename": pushitem.name,
             "state": pushitem.state,
             "src": pushitem.src,
-            "dest": str(pushitem.dest) if pushitem.dest else None,
-            "checksums": _get_checksum(),
+            "dest": None,
+            "checksums": checksums if checksums else None,
             "origin": pushitem.origin,
             "build": pushitem.build,
             "signing_key": pushitem.signing_key,
         }
 
-        return pushitem
+        if pushitem.dest:
+            for dest in pushitem.dest:
+                p = push_item.copy()
+                p["dest"] = dest
+                pushitems.append(p)
 
-    def _is_pushitem_obj(self, pushitem):
-        # check if the object is an instance of PushItem or
-        # its subclass using inspect instead of instanceof
-        # as pushsource depends on pushcollector module which
-        # leads to cyclic dependency
-        for item_cls in inspect.getmro(type(pushitem)):
-            if item_cls.__name__ == "PushItem" and item_cls.__module__.startswith(
-                "pushsource"
-            ):
-                return True
-
-        return False
+        return pushitems or [push_item]
 
     def update_push_items(self, items):
         pushitems = []
         for item in items:
-            if self._is_pushitem_obj(item):
-                item = self._translate_pushitem(item)
-            jsonschema.validate(item, schema=self._ITEM_SCHEMA)
-            pushitems.append(item)
+            item_dicts = self._translate_pushitem(item)
+            [jsonschema.validate(item, schema=self._ITEM_SCHEMA) for item in item_dicts]
+            pushitems.extend(item_dicts)
 
         return empty_future(self._delegate.update_push_items(pushitems))
 
