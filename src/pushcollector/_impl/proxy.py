@@ -4,7 +4,6 @@ import six
 from more_executors.futures import f_return, f_map
 import yaml
 import jsonschema
-import inspect
 
 
 def empty_future(value):
@@ -75,9 +74,9 @@ class CollectorProxy(object):
 
         if pushitem.dest:
             for dest in pushitem.dest:
-                p = push_item.copy()
-                p["dest"] = dest
-                pushitems.append(p)
+                push_item_copy = push_item.copy()
+                push_item_copy["dest"] = dest
+                pushitems.append(push_item_copy)
 
         return pushitems or [push_item]
 
@@ -85,7 +84,8 @@ class CollectorProxy(object):
         pushitems = []
         for item in items:
             item_dicts = self._translate_pushitem(item)
-            [jsonschema.validate(item, schema=self._ITEM_SCHEMA) for item in item_dicts]
+            for item_dict in item_dicts:
+                jsonschema.validate(item_dict, schema=self._ITEM_SCHEMA)
             pushitems.extend(item_dicts)
 
         return empty_future(self._delegate.update_push_items(pushitems))
