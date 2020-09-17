@@ -66,17 +66,20 @@ class CollectorProxy(object):
             "state": pushitem.state,
             "src": pushitem.src,
             "dest": None,
-            "checksums": checksums if checksums else None,
+            "checksums": checksums or None,
             "origin": pushitem.origin,
             "build": pushitem.build,
             "signing_key": pushitem.signing_key,
         }
 
-        if pushitem.dest:
-            for dest in pushitem.dest:
-                push_item_copy = push_item.copy()
-                push_item_copy["dest"] = dest
-                pushitems.append(push_item_copy)
+        # a pushitem dict for each destination from the
+        # list of destinations in PushItem object is
+        # returned else a single pushitem with dest None
+        # as expected in the pushitem schema
+        for dest in pushitem.dest or []:
+            push_item_copy = push_item.copy()
+            push_item_copy["dest"] = dest
+            pushitems.append(push_item_copy)
 
         return pushitems or [push_item]
 

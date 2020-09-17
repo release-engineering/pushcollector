@@ -22,7 +22,7 @@ class Collector(object):
         Arguments:
             items (List[dict], List[:class:`~pushsource.PushItem`])
                     A list of push item dicts or list of :class:`~pushsource.PushItem`
-                    objects
+                    objects.
 
                     Each dict must have, at minimum, "filename" and "state"
                     keys. For complete information on the format of push item

@@ -74,3 +74,28 @@ def test_pushitem_obj_attributes():
         assert push_args["origin"] == pushitem.origin
         assert push_args["build"] == pushitem.build
         assert push_args["signing_key"] == pushitem.signing_key
+
+
+def test_minimal_pushitem_obj():
+    """PushItem object with minimal attributes is translated to
+    pushitem dict with destination and checksums as None along
+    with other attributes as in the object"""
+
+    mock = Mock()
+    Collector.register_backend("mock", lambda: mock)
+    collector = Collector.get("mock")
+
+    pushitem = PushItem(name="test_push")
+    collector.update_push_items([pushitem])
+
+    update_push_item_args = mock.update_push_items.call_args[0][0]
+    assert len(update_push_item_args) == 1
+    push_args = update_push_item_args[0]
+    assert push_args["filename"] == pushitem.name
+    assert push_args["state"] == pushitem.state
+    assert push_args["src"] == pushitem.src
+    assert push_args["dest"] is None
+    assert push_args["checksums"] is None
+    assert push_args["origin"] == pushitem.origin
+    assert push_args["build"] == pushitem.build
+    assert push_args["signing_key"] == pushitem.signing_key
