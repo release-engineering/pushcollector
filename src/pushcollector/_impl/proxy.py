@@ -50,11 +50,48 @@ class CollectorProxy(object):
     def __init__(self, delegate):
         self._delegate = delegate
 
-    def update_push_items(self, items):
-        for item in items:
-            jsonschema.validate(item, schema=self._ITEM_SCHEMA)
+    def _translate_pushitem(self, pushitem):
+        if isinstance(pushitem, dict):
+            return [pushitem]
 
-        return empty_future(self._delegate.update_push_items(items))
+        pushitems = []
+        checksums = {}
+        if pushitem.md5sum:
+            checksums["md5"] = pushitem.md5sum
+        if pushitem.sha256sum:
+            checksums["sha256"] = pushitem.sha256sum
+
+        push_item = {
+            "filename": pushitem.name,
+            "state": pushitem.state,
+            "src": pushitem.src,
+            "dest": None,
+            "checksums": checksums or None,
+            "origin": pushitem.origin,
+            "build": pushitem.build,
+            "signing_key": pushitem.signing_key,
+        }
+
+        # a pushitem dict for each destination from the
+        # list of destinations in PushItem object is
+        # returned else a single pushitem with dest None
+        # as expected in the pushitem schema
+        for dest in pushitem.dest or []:
+            push_item_copy = push_item.copy()
+            push_item_copy["dest"] = dest
+            pushitems.append(push_item_copy)
+
+        return pushitems or [push_item]
+
+    def update_push_items(self, items):
+        pushitems = []
+        for item in items:
+            item_dicts = self._translate_pushitem(item)
+            for item_dict in item_dicts:
+                jsonschema.validate(item_dict, schema=self._ITEM_SCHEMA)
+            pushitems.extend(item_dicts)
+
+        return empty_future(self._delegate.update_push_items(pushitems))
 
     def attach_file(self, filename, content):
         content = maybe_encode(content)
