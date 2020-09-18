@@ -49,7 +49,8 @@ obtain a collector of the desired backend.</p>
 <dd><p>Record a state change on one or more push items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>items</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>]</em>) – <p>A list of push item dicts.</p>
+<dd class="field-odd"><p><strong>items</strong> (List[dict], List[<a class="reference external" href="https://release-engineering.github.io/pushsource/model/base.html#pushsource.PushItem" title="(in pushsource)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a>]) – <p>A list of push item dicts or list of <a class="reference external" href="https://release-engineering.github.io/pushsource/model/base.html#pushsource.PushItem" title="(in pushsource)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PushItem</span></code></a>
+objects.</p>
 <p>Each dict must have, at minimum, “filename” and “state”
 keys. For complete information on the format of push item
 dicts, see the <a class="reference internal" href="schema.html#schema"><span class="std std-ref">Push Item Schema</span></a> documentation.</p>
