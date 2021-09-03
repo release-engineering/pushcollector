@@ -54,7 +54,7 @@ def test_pushitem_obj_attributes():
         dest=["dest1", "dest2"],
         md5sum="bb1b0d528129f47798006e73307ba7a7",
         sha256sum="4fd23ae44f3366f12f769f82398e96dce72adab8e45dea4d721ddf43fdce31e2",
-        build="test_build",
+        build="test_build-1.0.0-1",
         signing_key="FD431D51",
     )
     collector.update_push_items([pushitem])
