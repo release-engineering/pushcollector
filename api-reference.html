@@ -4,11 +4,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>API Reference &#8212; pushcollector  documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -32,19 +33,19 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="api-reference">
+  <section id="api-reference">
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="pushcollector.Collector">
-<em class="property">class </em><code class="sig-prename descclassname">pushcollector.</code><code class="sig-name descname">Collector</code><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushcollector.Collector" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pushcollector.Collector">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushcollector.</span></span><span class="sig-name descname"><span class="pre">Collector</span></span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector" title="Permalink to this definition">¶</a></dt>
 <dd><p>A collector for log files and push item data.</p>
 <p>This class defines the interface for all pushcollector backends.
 Instances of this class shouldn’t be constructed directly; rather,
 the <a class="reference internal" href="#pushcollector.Collector.get" title="pushcollector.Collector.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> method should be used to
 obtain a collector of the desired backend.</p>
 <dl class="py method">
-<dt id="pushcollector.Collector.update_push_items">
-<code class="sig-name descname">update_push_items</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">items</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.update_push_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushcollector.Collector.update_push_items" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pushcollector.Collector.update_push_items">
+<span class="sig-name descname"><span class="pre">update_push_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.update_push_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.update_push_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Record a state change on one or more push items.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -69,8 +70,8 @@ or resolved with an error if the update failed.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pushcollector.Collector.attach_file">
-<code class="sig-name descname">attach_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">content</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.attach_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushcollector.Collector.attach_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pushcollector.Collector.attach_file">
+<span class="sig-name descname"><span class="pre">attach_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.attach_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.attach_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collect some content into a file of the specified name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -95,15 +96,15 @@ or resolved with an error if the operation failed.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pushcollector.Collector.append_file">
-<code class="sig-name descname">append_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">content</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.append_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushcollector.Collector.append_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pushcollector.Collector.append_file">
+<span class="sig-name descname"><span class="pre">append_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.append_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.append_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Like <a class="reference internal" href="#pushcollector.Collector.attach_file" title="pushcollector.Collector.attach_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">attach_file()</span></code></a>, except that if the named file already
 exists, content is appended to it rather than overwriting the file.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pushcollector.Collector.get">
-<em class="property">classmethod </em><code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">backend</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushcollector.Collector.get" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pushcollector.Collector.get">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtain a collector using the specified backend.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -128,8 +129,8 @@ may be used to record log files and push item data.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="pushcollector.Collector.register_backend">
-<em class="property">classmethod </em><code class="sig-name descname">register_backend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">factory</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.register_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushcollector.Collector.register_backend" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pushcollector.Collector.register_backend">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">register_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.register_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.register_backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a new pushcollector backend, or update/remove an existing
 backend.</p>
 <dl class="field-list simple">
@@ -152,8 +153,8 @@ the <a class="reference internal" href="#pushcollector.Collector" title="pushcol
 </dd></dl>
 
 <dl class="py method">
-<dt id="pushcollector.Collector.set_default_backend">
-<em class="property">classmethod </em><code class="sig-name descname">set_default_backend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.set_default_backend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pushcollector.Collector.set_default_backend" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pushcollector.Collector.set_default_backend">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">set_default_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.set_default_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.set_default_backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the default pushcollector backend.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -169,7 +170,7 @@ initial default.</p>
 
 </dd></dl>
 
-</div>
+</section>
 
 
           </div>
@@ -192,7 +193,7 @@ initial default.</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backends.html">Backends</a></li>
@@ -223,7 +224,7 @@ initial default.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -245,7 +246,7 @@ initial default.</p>
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
