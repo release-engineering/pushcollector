@@ -108,7 +108,7 @@ do whatever’s needed to record push items and log files in your
 environment (e.g. inserting records to a database; copying log files
 to a remote host).</p>
 <p>Here is an example of a contrived collector backend which saves push items
-to a database, and sends attached “files” to <a class="reference external" href="https://docs.python.org/3/library/syslog.html#module-syslog" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">syslog</span></code></a>.</p>
+to a database, and sends attached “files” to <a class="reference external" href="https://docs.python.org/3/library/syslog.html#module-syslog" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">syslog</span></code></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyCollector</span><span class="p">:</span>
   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db</span>
@@ -136,10 +136,10 @@ so it’s unnecessary to repeat this validation in your backend.</p></li>
 anywhere from zero to tens of thousands of items at once, so the backend
 may have to consider scaling and performance issues.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">attach_file</span></code> and <code class="docutils literal notranslate"><span class="pre">append_file</span></code> methods are always invoked with
-content encoded as <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>; backends shouldn’t attempt to handle
+content encoded as <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>; backends shouldn’t attempt to handle
 encoding themselves.</p></li>
 <li><p>Although the <a class="reference internal" href="api-reference.html#pushcollector.Collector" title="pushcollector.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a> interface is defined as
-returning <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Future" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Future</span></code></a> instances, your backend is allowed
+returning <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Future" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Future</span></code></a> instances, your backend is allowed
 to be implemented in a blocking or non-blocking style. If implemented as
 fully blocking, it need not return futures (as in the above example).</p></li>
 </ul>
