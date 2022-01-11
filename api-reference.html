@@ -37,7 +37,7 @@
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pushcollector.Collector">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pushcollector.</span></span><span class="sig-name descname"><span class="pre">Collector</span></span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pushcollector.</span></span><span class="sig-name descname"><span class="pre">Collector</span></span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector" title="Permalink to this definition">¶</a></dt>
 <dd><p>A collector for log files and push item data.</p>
 <p>This class defines the interface for all pushcollector backends.
 Instances of this class shouldn’t be constructed directly; rather,
@@ -104,7 +104,7 @@ exists, content is appended to it rather than overwriting the file.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pushcollector.Collector.get">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.get" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtain a collector using the specified backend.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -130,7 +130,7 @@ may be used to record log files and push item data.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pushcollector.Collector.register_backend">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">register_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.register_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.register_backend" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.register_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.register_backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Register a new pushcollector backend, or update/remove an existing
 backend.</p>
 <dl class="field-list simple">
@@ -154,7 +154,7 @@ the <a class="reference internal" href="#pushcollector.Collector" title="pushcol
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pushcollector.Collector.set_default_backend">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">set_default_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.set_default_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.set_default_backend" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_default_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.set_default_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.set_default_backend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the default pushcollector backend.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -246,7 +246,7 @@ initial default.</p>
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
