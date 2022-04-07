@@ -50,6 +50,15 @@ class CollectorProxy(object):
     def __init__(self, delegate):
         self._delegate = delegate
 
+    def __enter__(self):
+        if hasattr(self._delegate, "__enter__"):
+            self._delegate.__enter__()
+        return self
+
+    def __exit__(self, *args):
+        if hasattr(self._delegate, "__exit__"):
+            self._delegate.__exit__(*args)
+
     def _translate_pushitem(self, pushitem):
         if isinstance(pushitem, dict):
             return [pushitem]

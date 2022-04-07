@@ -23,10 +23,10 @@ def test_local_saves_to_artifacts(caplog, tmpdir, monkeypatch):
     ).result()
     collector.update_push_items([{"filename": "file3", "state": "MISSING"}]).result()
 
-    collector.attach_file("some-file.txt", u"Hello, world\n").result()
-    collector.attach_file("some-file.txt", u"Hello again\n").result()
+    collector.attach_file("some-file.txt", "Hello, world\n").result()
+    collector.attach_file("some-file.txt", "Hello again\n").result()
     collector.attach_file("some-file.bin", b"\x00\x01\x02").result()
-    collector.append_file("appended-file.txt", u"chunk 1").result()
+    collector.append_file("appended-file.txt", "chunk 1").result()
     collector.append_file("appended-file.txt", b"\nchunk 2\n").result()
 
     # It should have created an "artifacts/latest" directory/symlink

@@ -10,11 +10,33 @@ class Collector(object):
     Instances of this class shouldn't be constructed directly; rather,
     the :meth:`~pushcollector.Collector.get` method should be used to
     obtain a collector of the desired backend.
+
+    Custom backends *may* choose to implement the context manager protocol
+    (i.e. ``__enter__``, and ``__exit__``). If a backend does support the
+    context manager protocol, the ``__enter__`` and ``__exit__`` methods
+    may be called more than once. Whether a backend is single-use,
+    reentrant, or reusable is an implementation detail left to the
+    programmer, and no attempt is made to handle any exceptions that may
+    result from calling a backend's ``__enter__`` method more than once.
+
+    .. versionadded:: 1.3.0
+        Backends can choose to support the context manager protocol.
+
+    See Also:
+        Python docs on the different types of `context managers`_.
+
+    .. _context managers: https://docs.python.org/3/library/contextlib.html#single-use-reusable-and-reentrant-context-managers
     """
 
     _BACKENDS = {}
     _INITIAL_BACKEND = "local"
     _DEFAULT_BACKEND = _INITIAL_BACKEND
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
 
     def update_push_items(self, items):
         """Record a state change on one or more push items.
@@ -69,6 +91,10 @@ class Collector(object):
     @classmethod
     def get(cls, backend=None):
         """Obtain a collector using the specified backend.
+
+        .. versionadded:: 1.3.0
+           The object returned by a call to ``get`` can always be used as a
+           context manager, regardless of which backend is requested.
 
         Parameters:
             backend (str)

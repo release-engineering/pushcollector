@@ -15,3 +15,16 @@ def test_unimplemented():
 
     with pytest.raises(NotImplementedError):
         collector.append_file("somefile.txt", "foobar")
+
+
+def test_base_class_context_manager():
+    """Exercise the __enter__ and __exit__ methods of Collector."""
+    collector = Collector()
+    # use my-collector name because the autouse fixture `reset_backend`
+    # will clean it up for us
+    Collector.register_backend("my-collector", lambda: collector)
+    Collector.set_default_backend("my-collector")
+
+    # empty with just to exercise __enter__ and __exit__
+    with Collector.get():
+        pass

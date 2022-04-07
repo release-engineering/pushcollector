@@ -1,3 +1,8 @@
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from mock import MagicMock
+
 import pytest
 
 from pushcollector import Collector
@@ -8,7 +13,6 @@ def reset_backend():
     """Resets the default backend both before and after each test,
     and clears my-collector backend.
     """
-
     Collector.set_default_backend(None)
     yield
     Collector.set_default_backend(None)
@@ -92,3 +96,19 @@ def test_unregister_resets_default():
 
     # And it should not have constructed the custom backend
     assert CountingCollector.CONSTRUCTED_COUNT == 2
+
+
+def test_context_manager_backend():
+    """Test a backend's context manager protocol methods are called properly."""
+    collector = MagicMock(spec=Collector)
+
+    # use my-collector name because the autouse fixture `reset_backend`
+    # will clean it up for us
+    Collector.register_backend("my-collector", lambda: collector)
+    Collector.set_default_backend("my-collector")
+
+    with Collector.get():
+        pass
+
+    collector.__enter__.assert_called_once()
+    collector.__exit__.assert_called_once_with(*(None,) * 3)
