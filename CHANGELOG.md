@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- n/a
+## [1.3.0] - 2022-04-19
+
+### Added
+
+- `Collector` instances now support the context manager protocol.
 
 ## [1.2.0] - 2021-01-26
 
@@ -30,7 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release to PyPI
 
-[Unreleased]: https://github.com/release-engineering/pushcollector/compare/v1.2.0...HEAD
-[1.2.0]: https://github.com/release-engineering/pushcollector/compare/v1.0.0...v1.2.0
+[Unreleased]: https://github.com/release-engineering/pushcollector/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/release-engineering/pushcollector/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/release-engineering/pushcollector/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/release-engineering/pushcollector/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/release-engineering/pushcollector/compare/v0.1.1...v1.0.0
