@@ -43,11 +43,33 @@
 <span class="sd">    Instances of this class shouldn&#39;t be constructed directly; rather,</span>
 <span class="sd">    the :meth:`~pushcollector.Collector.get` method should be used to</span>
 <span class="sd">    obtain a collector of the desired backend.</span>
+
+<span class="sd">    Custom backends *may* choose to implement the context manager protocol</span>
+<span class="sd">    (i.e. ``__enter__``, and ``__exit__``). If a backend does support the</span>
+<span class="sd">    context manager protocol, the ``__enter__`` and ``__exit__`` methods</span>
+<span class="sd">    may be called more than once. Whether a backend is single-use,</span>
+<span class="sd">    reentrant, or reusable is an implementation detail left to the</span>
+<span class="sd">    programmer, and no attempt is made to handle any exceptions that may</span>
+<span class="sd">    result from calling a backend&#39;s ``__enter__`` method more than once.</span>
+
+<span class="sd">    .. versionadded:: 1.3.0</span>
+<span class="sd">        Backends can choose to support the context manager protocol.</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        Python docs on the different types of `context managers`_.</span>
+
+<span class="sd">    .. _context managers: https://docs.python.org/3/library/contextlib.html#single-use-reusable-and-reentrant-context-managers</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_BACKENDS</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">_INITIAL_BACKEND</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span>
     <span class="n">_DEFAULT_BACKEND</span> <span class="o">=</span> <span class="n">_INITIAL_BACKEND</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">pass</span>
 
 <div class="viewcode-block" id="Collector.update_push_items"><a class="viewcode-back" href="../../../api-reference.html#pushcollector.Collector.update_push_items">[docs]</a>    <span class="k">def</span> <span class="nf">update_push_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Record a state change on one or more push items.</span>
@@ -102,6 +124,10 @@
 <div class="viewcode-block" id="Collector.get"><a class="viewcode-back" href="../../../api-reference.html#pushcollector.Collector.get">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Obtain a collector using the specified backend.</span>
+
+<span class="sd">        .. versionadded:: 1.3.0</span>
+<span class="sd">           The object returned by a call to ``get`` can always be used as a</span>
+<span class="sd">           context manager, regardless of which backend is requested.</span>
 
 <span class="sd">        Parameters:</span>
 <span class="sd">            backend (str)</span>
@@ -262,7 +288,7 @@
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

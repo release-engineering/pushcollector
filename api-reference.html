@@ -43,6 +43,20 @@
 Instances of this class shouldn’t be constructed directly; rather,
 the <a class="reference internal" href="#pushcollector.Collector.get" title="pushcollector.Collector.get"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get()</span></code></a> method should be used to
 obtain a collector of the desired backend.</p>
+<p>Custom backends <em>may</em> choose to implement the context manager protocol
+(i.e. <code class="docutils literal notranslate"><span class="pre">__enter__</span></code>, and <code class="docutils literal notranslate"><span class="pre">__exit__</span></code>). If a backend does support the
+context manager protocol, the <code class="docutils literal notranslate"><span class="pre">__enter__</span></code> and <code class="docutils literal notranslate"><span class="pre">__exit__</span></code> methods
+may be called more than once. Whether a backend is single-use,
+reentrant, or reusable is an implementation detail left to the
+programmer, and no attempt is made to handle any exceptions that may
+result from calling a backend’s <code class="docutils literal notranslate"><span class="pre">__enter__</span></code> method more than once.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3.0: </span>Backends can choose to support the context manager protocol.</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>Python docs on the different types of <a class="reference external" href="https://docs.python.org/3/library/contextlib.html#single-use-reusable-and-reentrant-context-managers">context managers</a>.</p>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="pushcollector.Collector.update_push_items">
 <span class="sig-name descname"><span class="pre">update_push_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.update_push_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.update_push_items" title="Permalink to this definition">¶</a></dt>
@@ -106,6 +120,10 @@ exists, content is appended to it rather than overwriting the file.</p>
 <dt class="sig sig-object py" id="pushcollector.Collector.get">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pushcollector/_impl/collector.html#Collector.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pushcollector.Collector.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtain a collector using the specified backend.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3.0: </span>The object returned by a call to <code class="docutils literal notranslate"><span class="pre">get</span></code> can always be used as a
+context manager, regardless of which backend is requested.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>backend</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – <p>If provided, must be the name of an existing pushcollector backend.
@@ -246,7 +264,7 @@ initial default.</p>
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
