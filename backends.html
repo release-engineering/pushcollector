@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Backends &#8212; pushcollector  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -12,6 +12,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -34,11 +35,11 @@
           <div class="body" role="main">
             
   <section id="backends">
-<span id="id1"></span><h1>Backends<a class="headerlink" href="#backends" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>Backends<a class="headerlink" href="#backends" title="Permalink to this heading">¶</a></h1>
 <p>The pushcollector library ships with multiple backends implementing the
 <a class="reference internal" href="api-reference.html#pushcollector.Collector" title="pushcollector.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a> interface, and also allows integrators
 to implement and register their own backends.</p>
-<div class="contents local topic" id="contents">
+<nav class="contents local" id="contents">
 <ul class="simple">
 <li><p><a class="reference internal" href="#local" id="id2">local</a></p></li>
 <li><p><a class="reference internal" href="#dummy" id="id3">dummy</a></p></li>
@@ -51,9 +52,9 @@ to implement and register their own backends.</p>
 </ul>
 </li>
 </ul>
-</div>
+</nav>
 <section id="local">
-<h2><a class="toc-backref" href="#id2">local</a><a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">local</a><a class="headerlink" href="#local" title="Permalink to this heading">¶</a></h2>
 <p>The “local” backend is the default backend for the pushcollector library.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Collector</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
 </pre></div>
@@ -84,7 +85,7 @@ or  <a class="reference internal" href="api-reference.html#pushcollector.Collect
 </ul>
 </section>
 <section id="dummy">
-<h2><a class="toc-backref" href="#id3">dummy</a><a class="headerlink" href="#dummy" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">dummy</a><a class="headerlink" href="#dummy" title="Permalink to this heading">¶</a></h2>
 <p>The “dummy” backend ignores all provided data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Collector</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dummy&quot;</span><span class="p">)</span>
 </pre></div>
@@ -95,13 +96,13 @@ where there is no need to collect information during a task.</p>
 provided to the backend must satisfy the <a class="reference internal" href="schema.html#schema"><span class="std std-ref">Push Item Schema</span></a>.</p>
 </section>
 <section id="implementing-a-backend">
-<h2><a class="toc-backref" href="#id4">Implementing a backend</a><a class="headerlink" href="#implementing-a-backend" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Implementing a backend</a><a class="headerlink" href="#implementing-a-backend" title="Permalink to this heading">¶</a></h2>
 <p>The built-in backends are intended for local development and testing.
 For production use, you’ll likely need to implement your own backend
 suitable for your task execution environment.  These are the
 necessary steps to add a new backend:</p>
 <section id="implement-collector-interface">
-<h3><a class="toc-backref" href="#id5">Implement collector interface</a><a class="headerlink" href="#implement-collector-interface" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Implement collector interface</a><a class="headerlink" href="#implement-collector-interface" title="Permalink to this heading">¶</a></h3>
 <p>Write a class which implements the instance methods on
 the <a class="reference internal" href="api-reference.html#pushcollector.Collector" title="pushcollector.Collector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Collector</span></code></a> interface. This class should
 do whatever’s needed to record push items and log files in your
@@ -145,7 +146,7 @@ fully blocking, it need not return futures (as in the above example).</p></li>
 </ul>
 </section>
 <section id="register-the-backend">
-<h3><a class="toc-backref" href="#id6">Register the backend</a><a class="headerlink" href="#register-the-backend" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Register the backend</a><a class="headerlink" href="#register-the-backend" title="Permalink to this heading">¶</a></h3>
 <p>Call the <a class="reference internal" href="api-reference.html#pushcollector.Collector.register_backend" title="pushcollector.Collector.register_backend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_backend()</span></code></a> method to register
 the backend with the library, using a short meaningful name.</p>
 <p>This method accepts any callable which can be invoked to create an instance
@@ -161,7 +162,7 @@ bind that context when the backend is registered.</p>
 </div>
 </section>
 <section id="set-as-default-optional">
-<h3><a class="toc-backref" href="#id7">Set as default (optional)</a><a class="headerlink" href="#set-as-default-optional" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Set as default (optional)</a><a class="headerlink" href="#set-as-default-optional" title="Permalink to this heading">¶</a></h3>
 <p>After you’ve registered your own backend, you can optionally set it as the default
 backend for the library. This is useful in order to provide your backend to third-party
 code implemented against the default backend.</p>
@@ -171,7 +172,7 @@ code implemented against the default backend.</p>
 </div>
 </section>
 <section id="unregister-backend-optional">
-<h3><a class="toc-backref" href="#id8">Unregister backend (optional)</a><a class="headerlink" href="#unregister-backend-optional" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Unregister backend (optional)</a><a class="headerlink" href="#unregister-backend-optional" title="Permalink to this heading">¶</a></h3>
 <p>If it’s not appropriate for your backend to remain available for the lifetime
 of the current process, you can unregister it once it’s no longer required.
 Simply call the <a class="reference internal" href="api-reference.html#pushcollector.Collector.register_backend" title="pushcollector.Collector.register_backend"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_backend()</span></code></a> method again,
@@ -247,7 +248,7 @@ passing <code class="docutils literal notranslate"><span class="pre">None</span>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -264,7 +265,7 @@ passing <code class="docutils literal notranslate"><span class="pre">None</span>
       &copy;2019, Red Hat.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
