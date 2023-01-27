@@ -1,6 +1,5 @@
 import os
 
-import six
 from more_executors.futures import f_return, f_map
 import yaml
 import jsonschema
@@ -16,7 +15,7 @@ def empty_future(value):
 
 
 def maybe_encode(value):
-    if isinstance(value, six.text_type):
+    if isinstance(value, str):
         # It's a string => make it bytes
         return value.encode("utf-8")
     # It's not a string => hopefully it's already bytes

@@ -3,20 +3,22 @@ name: Tox tests
 on: [push, pull_request]
 
 jobs:
-  py27:
+  py38:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install RPM
-        run: sudo apt-get install -y rpm libkrb5-dev
+      - name: Update existing dependencies
+        run: sudo apt-get update -y
+      - name: Install system dependencies
+        run: sudo apt-get install -y libkrb5-dev
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: 2.7
-      - name: Install Tox
+          python-version: 3.8
+      - name: Install tox
         run: pip install tox
-      - name: Run Tox
-        run: tox -e py27
+      - name: Run tox
+        run: tox -e py38
   static:
     runs-on: ubuntu-latest
     steps:
