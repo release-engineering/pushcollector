@@ -132,8 +132,6 @@ autodoc_member_order = "bysource"
 autodoc_inherit_docstrings = False
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    # "requests": ("https://2.python-requests.org/en/master/", None),
     "more-executors": ("https://rohanpm.github.io/more-executors/", None),
-    # "attrs": ("https://www.attrs.org/en/stable/", None),
     "pushsource": ("https://release-engineering.github.io/pushsource/", None),
 }
