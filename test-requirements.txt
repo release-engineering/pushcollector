@@ -2,3 +2,4 @@ pytest
 mock
 pushsource
 rpm-py-installer
+bandit==1.7.5
