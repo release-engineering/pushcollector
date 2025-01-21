@@ -1,5 +1,5 @@
 pytest
 mock
 pushsource
-rpm-py-installer
+rpmdyn
 bandit==1.7.5
