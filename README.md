@@ -5,7 +5,7 @@ A Python library for collecting information from push tasks, used by
 [release-engineering](https://github.com/release-engineering) publishing tools.
 
 [![Build Status](https://travis-ci.org/release-engineering/pushcollector.svg?branch=master)](https://travis-ci.org/release-engineering/pushcollector)
-[![Coverage Status](https://coveralls.io/repos/github/release-engineering/pushcollector/badge.svg?branch=master)](https://coveralls.io/github/release-engineering/pushcollector?branch=master)
+[![Coverage Status](https://app.codecov.io/gh/release-engineering/pushcollector)](https://app.codecov.io/gh/release-engineering/pushcollector)
 
 - [Source](https://github.com/release-engineering/pushcollector)
 - [Documentation](https://release-engineering.github.io/pushcollector/)
